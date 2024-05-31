@@ -36,6 +36,7 @@ struct LoginView: View {
                 GoogleSignInButton {
                     // Call the sign-in function in the view model
                     viewModel.signInWithGoogle(authManager: authManager, dismiss: {
+                        authManager.makeFetchCall = true
                         dismiss()
                     })
                 }
