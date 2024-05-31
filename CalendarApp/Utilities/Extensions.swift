@@ -9,22 +9,24 @@ import Foundation
 import SwiftUI
 
 extension Int {
+    // Computed property to get the month name from an integer (1 to 12)
     var getMonthName: String {
-       let formatter = DateFormatter()
-       return formatter.monthSymbols[self - 1]
-   }
+        let formatter = DateFormatter()
+        return formatter.monthSymbols[self - 1]
+    }
 }
 
 extension Date {
+    // Method to convert a Date object to a formatted string
     func getDateString(_ dateFormat: String = DateFormats.dayDateAndMonth.rawValue) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .medium
-        dateFormatter.timeStyle =  .none
+        dateFormatter.timeStyle = .none
         dateFormatter.dateFormat = dateFormat
-        let dueDateFormatted = dateFormatter.string(from: self )
-        return dueDateFormatted
+        return dateFormatter.string(from: self)
     }
     
+    // Method to check if the time is after midnight
     func isTimeAfterMidnight() -> Bool {
         let calendar = Calendar.current
         let hour = calendar.component(.hour, from: self)
@@ -39,8 +41,8 @@ extension Date {
 }
 
 extension String {
+    // Method to convert a string to a Date object with the current time and a specified year
     func convertStringToDateWithCurrentTime(_ year: Int, _ format: String = DateFormats.dayDateAndMonth.rawValue) -> Date {
-        // Create a DateFormatter for the given format
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = format
         
@@ -53,6 +55,8 @@ extension String {
         let calendar = Calendar.current
         let dayComponents = calendar.dateComponents([.day, .month], from: dateWithoutTime)
         let currentComponents = calendar.dateComponents([.hour, .minute, .second], from: Date())
+        
+        // Combine the parsed date components with the current time components
         var dateComponents = DateComponents()
         dateComponents.year = year
         dateComponents.month = dayComponents.month ?? 1
@@ -64,6 +68,7 @@ extension String {
         return calendar.date(from: dateComponents) ?? Date()
     }
     
+    // Computed property to remove whitespaces and new lines from a string
     var removeWhiteSpacesAndNewLines: String {
         let components = self.components(separatedBy: .whitespacesAndNewlines)
         return components.filter { !$0.isEmpty }.joined(separator: " ")
@@ -71,8 +76,8 @@ extension String {
 }
 
 extension View {
+    // Method to end text editing and dismiss the keyboard
     func endTextEditing() {
-        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder),
-                                        to: nil, from: nil, for: nil)
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
 }
