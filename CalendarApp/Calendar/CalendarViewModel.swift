@@ -131,15 +131,20 @@ class CalendarViewModel: ObservableObject {
     func fetchEvents() {
         print("Fetch events called")
         isLoading = true
-        calendarService.fetchEvents(calendarMonth: selectedCalendarMonth) { [weak self] result in
+        DispatchQueue.global().async { [weak self] in
             guard let self = self else { return }
-            isLoading = false
-            switch result {
-            case .success(let events):
-                self.eventsDict = self.convertToEventDictionary(events: events)
-            case .failure(let error):
-                self.eventsDict = [:]
-                self.showAlert(error.localizedDescription)
+            self.calendarService.fetchEvents(calendarMonth: selectedCalendarMonth) { [weak self] result in
+                DispatchQueue.main.async {
+                    guard let self = self else { return }
+                    self.isLoading = false
+                    switch result {
+                    case .success(let events):
+                        self.eventsDict = self.convertToEventDictionary(events: events)
+                    case .failure(let error):
+                        self.eventsDict = [:]
+                        self.showAlert(error.localizedDescription)
+                    }
+                }
             }
         }
     }
